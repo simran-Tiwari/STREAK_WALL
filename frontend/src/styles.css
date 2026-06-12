@@ -1,0 +1,37 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.2s, color 0.2s;
+}
+
+/* Dark theme (default) — deep indigo, not pure black */
+body[data-theme="dark"] {
+  --bg: #12112a;
+  --bg2: #1e1c3a;
+  --text: #e8e6ff;
+  --muted: #9490b8;
+  --border: #2e2b52;
+  --hover: #2a2750;
+  --accent: #7c6ff7;
+  --accent-alt: #56cfb2;
+  --cell-bg: #2c2a50;
+  --cell-border: #3d3a6e;
+}
+
+/* Light theme — clean white with purple accents */
+body[data-theme="light"] {
+  --bg: #f0efff;
+  --bg2: #ffffff;
+  --text: #1a1740;
+  --muted: #6b6896;
+  --border: #d4d1f0;
+  --hover: #e8e6ff;
+  --accent: #5b4de8;
+  --accent-alt: #0d9e83;
+  --cell-bg: #e8e6ff;
+  --cell-border: #ccc9f0;
+}

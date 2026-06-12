@@ -1,0 +1,112 @@
+<div class="wall-container">
+
+  <!-- Header -->
+  <header>
+    <div class="habit-name">
+      @if (!editingName) {
+        <h1 (click)="editingName = true; nameInput = habit?.name ?? ''" title="Click to edit">
+          {{ habit?.name ?? 'Loading...' }}
+        </h1>
+      } @else {
+        <input [(ngModel)]="nameInput" (keyup.enter)="saveName()" (blur)="saveName()" autofocus />
+      }
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" (click)="theme.toggle()" title="Toggle theme">{{ theme.isDark() ? '☀️' : '🌙' }}</button>
+      <a routerLink="/profile" class="icon-btn" title="Profile">👤</a>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+  </header>
+
+  <!-- Habit Tabs -->
+  <div class="tabs">
+    @for (h of habits(); track h._id; let i = $index) {
+      <button class="tab" [class.active]="i === activeIdx()" (click)="activeIdx.set(i); updateStreaks()">
+        {{ h.name }}
+      </button>
+    }
+    @if (habits().length < 5) {
+      <button class="tab add-tab" (click)="showNewHabit = true">+</button>
+    }
+  </div>
+
+  @if (showNewHabit) {
+    <div class="new-habit-row">
+      <input [(ngModel)]="newHabitName" placeholder="Habit name" (keyup.enter)="createHabit()" autofocus />
+      <button (click)="createHabit()">Add</button>
+      <button class="cancel" (click)="showNewHabit = false">Cancel</button>
+    </div>
+  }
+
+  @if (habit) {
+    <!-- Streaks -->
+    <div class="streaks">
+      <span>🔥 Current: <strong>{{ streaks().current }}</strong> days</span>
+      <span>🏆 Longest: <strong>{{ streaks().longest }}</strong> days</span>
+      <button class="freeze-btn" (click)="applyFreeze()" title="Use streak freeze for yesterday">🧊 Freeze</button>
+    </div>
+
+    <!-- Month Navigation -->
+    <div class="month-nav">
+      <button (click)="prevMonth()">‹</button>
+      <span>{{ monthLabel }}</span>
+      <button (click)="nextMonth()" [disabled]="isCurrentMonthView()">›</button>
+    </div>
+    <div class="grid">
+      @for (day of weekdays; track day) {
+        <div class="weekday">{{ day }}</div>
+      }
+      @for (cell of cells(); track cell.date || $index) {
+        <div [class]="cellClass(cell)" (click)="onCellClick(cell)" [title]="getEntry(cell.date)?.note ?? ''">
+          <span class="day-num">{{ cell.label || '' }}</span>
+          @if (getEntry(cell.date)) {
+            <span class="intensity-emoji">{{ getEntry(cell.date)!.intensity }}</span>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-card">
+      <div class="stat">
+        <span class="stat-label">This week</span>
+        <strong>{{ streaks().current > 0 ? (7 - (7 - streaks().current < 0 ? 0 : 7 - streaks().current)) : 0 }}</strong>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Export</span>
+        <button class="export-btn" (click)="export('json')">JSON</button>
+        <button class="export-btn" (click)="export('csv')">CSV</button>
+      </div>
+      <div class="stat">
+        <button class="reset-btn" (click)="confirmReset()">Reset Data</button>
+      </div>
+    </div>
+  } @else {
+    <p class="empty-state">Create your first habit using the + tab above.</p>
+  }
+
+  <!-- Note/Intensity Modal -->
+  @if (showModal) {
+    <div class="modal-overlay" (click)="showModal = false">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <h3>Mark {{ modalDate }} done</h3>
+        <textarea [(ngModel)]="modalNote" placeholder="What did you do? (optional)" rows="3"></textarea>
+        <div class="intensity-row">
+          @for (e of intensities; track e) {
+            <button [class.selected]="modalIntensity === e" (click)="modalIntensity = e">{{ e }}</button>
+          }
+        </div>
+        <div class="modal-actions">
+          <button class="confirm-btn" (click)="confirmToggle()">Save</button>
+          <button class="cancel" (click)="showModal = false">Cancel</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Toast -->
+  @if (toast()) {
+    <div class="toast">{{ toast() }}</div>
+  }
+
+</div>

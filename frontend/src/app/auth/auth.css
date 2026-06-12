@@ -1,0 +1,21 @@
+:host { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+.auth-box {
+  display: flex; flex-direction: column; gap: 12px;
+  width: 320px; padding: 32px; border-radius: 12px;
+  background: #1a1a2e; box-shadow: 0 4px 24px rgba(0,0,0,.4);
+}
+h2 { margin: 0 0 8px; color: #e0e0e0; text-align: center; }
+input {
+  padding: 10px 14px; border: 1px solid #333; border-radius: 8px;
+  background: #0f0f1a; color: #e0e0e0; font-size: 14px;
+}
+input:focus { outline: none; border-color: #4caf50; }
+button {
+  padding: 10px; background: #4caf50; color: #fff;
+  border: none; border-radius: 8px; cursor: pointer; font-size: 15px;
+}
+button:hover { background: #43a047; }
+p { margin: 0; text-align: center; color: #aaa; font-size: 13px; }
+p a { color: #4caf50; text-decoration: none; }
+.error { color: #ef5350; }
