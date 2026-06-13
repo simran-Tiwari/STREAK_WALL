@@ -8,7 +8,7 @@ import profileRoutes from './routes/profile.routes';
 import { authMiddleware } from './middleware/auth.middleware';
 
 const app = express();
-app.use(cors());
+app.use(cors({ origin: ['https://streak-wall.vercel.app', 'http://localhost:4200'] }));
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
